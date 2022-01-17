@@ -17,6 +17,7 @@ var (
 	_ = Warn
 	_ = Error
 	_ = Fatal
+	_ = InitLogger
 )
 
 func InitLogger(path, logPrefix, logLevel string, shouldSave bool) error {
@@ -44,8 +45,8 @@ func InitLogger(path, logPrefix, logLevel string, shouldSave bool) error {
 }
 
 func Trace(message string, params ...interface{}) {
-	if shouldParseFields(params...) {
-		logging.WithFields(createFields(params...)).Trace(message)
+	if hasParseableFields(params...) {
+		logging.WithFields(makeFields(params...)).Trace(message)
 		return
 	}
 
@@ -53,8 +54,8 @@ func Trace(message string, params ...interface{}) {
 }
 
 func Debug(message string, params ...interface{}) {
-	if shouldParseFields(params...) {
-		logging.WithFields(createFields(params...)).Debug(message)
+	if hasParseableFields(params...) {
+		logging.WithFields(makeFields(params...)).Debug(message)
 		return
 	}
 
@@ -62,8 +63,8 @@ func Debug(message string, params ...interface{}) {
 }
 
 func Info(message string, params ...interface{}) {
-	if shouldParseFields(params...) {
-		logging.WithFields(createFields(params...)).Info(message)
+	if hasParseableFields(params...) {
+		logging.WithFields(makeFields(params...)).Info(message)
 		return
 	}
 
@@ -71,8 +72,8 @@ func Info(message string, params ...interface{}) {
 }
 
 func Warn(message string, params ...interface{}) {
-	if shouldParseFields(params...) {
-		logging.WithFields(createFields(params...)).Warn(message)
+	if hasParseableFields(params...) {
+		logging.WithFields(makeFields(params...)).Warn(message)
 		return
 	}
 
@@ -80,8 +81,8 @@ func Warn(message string, params ...interface{}) {
 }
 
 func Error(message string, params ...interface{}) {
-	if shouldParseFields(params...) {
-		logging.WithFields(createFields(params...)).Error(message)
+	if hasParseableFields(params...) {
+		logging.WithFields(makeFields(params...)).Error(message)
 		return
 	}
 
@@ -89,15 +90,15 @@ func Error(message string, params ...interface{}) {
 }
 
 func Fatal(message string, params ...interface{}) {
-	if shouldParseFields(params...) {
-		logging.WithFields(createFields(params...)).Fatal(message)
+	if hasParseableFields(params...) {
+		logging.WithFields(makeFields(params...)).Fatal(message)
 		return
 	}
 
 	logging.Fatal(message)
 }
 
-func createFields(params ...interface{}) logging.Fields {
+func makeFields(params ...interface{}) logging.Fields {
 	m := make(logging.Fields)
 	for i := 0; i < len(params); i += 2 {
 		k, ok := params[i].(string)
@@ -109,7 +110,7 @@ func createFields(params ...interface{}) logging.Fields {
 	return m
 }
 
-func shouldParseFields(params ...interface{}) bool {
+func hasParseableFields(params ...interface{}) bool {
 	return len(params) != 0 && len(params)%2 == 0
 }
 
