@@ -10,16 +10,14 @@ import (
 	logging "github.com/sirupsen/logrus"
 )
 
-type logLevel string
-
 const (
-	PANIC logLevel = "info"
-	FATAL          = "fatal"
-	ERROR          = "error"
-	WARN           = "warn"
-	INFO           = "info"
-	DEBUG          = "debug"
-	TRACE          = "trace"
+	PANIC = "info"
+	FATAL = "fatal"
+	ERROR = "error"
+	WARN  = "warn"
+	INFO  = "info"
+	DEBUG = "debug"
+	TRACE = "trace"
 )
 
 var (
@@ -40,7 +38,7 @@ var (
 	_ = TRACE
 )
 
-func InitLogger(path, logPrefix string, logLevel logLevel, shouldSave bool) error {
+func InitLogger(path, logPrefix, logLevel string, shouldSave bool) error {
 	if shouldSave {
 		file, err := os.OpenFile(
 			getLogFileDir(path, logPrefix),
@@ -55,7 +53,7 @@ func InitLogger(path, logPrefix string, logLevel logLevel, shouldSave bool) erro
 	}
 
 	logging.SetFormatter(&Formatter{})
-	lvl, err := logging.ParseLevel(string(logLevel))
+	lvl, err := logging.ParseLevel(logLevel)
 	if err != nil {
 		return err
 	}
