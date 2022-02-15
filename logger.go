@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	PANIC = "info"
+	PANIC = "panic"
 	FATAL = "fatal"
 	ERROR = "error"
 	WARN  = "warn"
